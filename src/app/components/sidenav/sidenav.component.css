@@ -1,0 +1,14 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 100vh; /* Hace que el contenedor ocupe toda la pantalla */
+    display: flex;
+    flex-direction: column;
+}
+
+.main-sidebar {
+    height: 100%; /* Asegura que el sidebar ocupe el alto total del contenedor */
+}

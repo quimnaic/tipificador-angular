@@ -1,0 +1,310 @@
+<div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
+<section class="content">
+    <div class="content-fluid">
+        <div class="col-sm-12 col-12">
+            <div class="row">
+                <ng-container *ngIf="detail == false && upload == false && importUpdate == false" id="detail">
+                    <div class="row" id="allRecords">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a for="" class="card-title">Registros</a>
+                                    <div class="card-tools">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default" (click)="onUpload()" data-toggle="tooltip" data-placement="top" title="Cargue masivo de registros">
+                                                <i class="fas fa-file-upload"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-default" (click)="onImportUpload()" data-toggle="tooltip" data-placement="top" title="Actualización de deuda">
+                                                <i class="fas fa-file-upload"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-default" (click)="reportAire()" data-toggle="tooltip" data-placement="top" title="Descarga reporte Aire">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">                
+                                    <input type="text" class="form-control mb-3" placeholder="Buscar por NIC..." [(ngModel)]="searchNIC" (input)="filterCustomers()">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Campaña</th>
+                                                <th>NIC</th>
+                                                <th>Territorial</th>	
+                                                <th>Zona</th>
+                                                <th>Cliente</th> 
+                                                <th>Meta de Recaurdo</th>
+                                                <th>Total Facturas</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>                                                              
+                                        <tbody>
+                                            <tr *ngFor="let customer of filteredCustomers | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                                                <td>{{customer.codcamp}}</td>
+                                                <td><b>{{customer.nic}}</b></td>
+                                                <td>{{customer.territorial}}</td>
+                                                <td>{{customer.zone}}</td>
+                                                <td>{{customer.customer}}</td>
+                                                <td>{{customer.collection_target | currencyFormat }}</td>
+                                                <td>{{customer.total_bills}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary" (click)="onView(customer)" data-toggle="tooltip" data-placement="top" title="Ver">
+                                                        <i class="far fa-arrow-alt-circle-right"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="detail == true && upload == false && importUpdate == false" id="record">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <button type="button" class="btn btn-default" (click)="onBack()">
+                                    <i class="far fa-arrow-alt-circle-left"></i>&nbsp;Volver
+                                </button>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row" id="detail">
+                        <div class="col-md-3">
+                            <div class="alert alert-info alert-dismissible center">
+                                <h4>NIC:&nbsp;{{customerSelected.nic}}</h4>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <tr>
+                                            <td colspan="3"><b>CLIENTE:</b></td>
+                                            <td colspan="2">{{customerSelected.customer}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><b>TELEFONO:</b></td>
+                                            <td colspan="2">
+                                                <ul *ngIf="customerSelected.phone">
+                                                    <li *ngFor="let phone of customerSelected.phone.split(' ').slice(0, showAll ? customerSelected.phone.split(' ').length : maxPhonesToShow)">
+                                                      {{ phone }}
+                                                    </li>
+                                                  </ul>
+                                                  
+                                                  <button class="btn btn-sm  btn-info" *ngIf="customerSelected.phone.split(' ').length > maxPhonesToShow" (click)="toggleShowAll()">
+                                                    {{ showAll ? 'Ver menos' : 'Ver más' }}
+                                                  </button>                                                  
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <tr>
+                                            <td><b for="">TERRITORIAL:</b></td>
+                                            <td>{{customerSelected.territorial}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b for="">MUNICIPIO:</b></td>
+                                            <td>{{customerSelected.municipality}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>CORREGIMIENTO:</b></td>
+                                            <td>{{customerSelected.district}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b for="">LOCALIDAD:</b></td>
+                                            <td>{{customerSelected.locality}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b for="">DIRECCIÓN:</b></td>
+                                            <td>{{customerSelected.address}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card card-info card-outline">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <table class="table mx-auto text-center">
+                                            <tr>
+                                                <td colspan="2"><b>ALIADO COMERCIAL:</b></td>
+                                                <td>{{customerSelected.commercial_partner}}</td>
+                                                <td colspan="3"><b>ESTADO SUMINISTRO:</b></td>
+                                                <td>{{customerSelected.supply_status}}</td>
+                                                <td colspan="2"><b>TARIFA:</b></td>
+                                                <td>{{customerSelected.rate}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><b>TIPO MEDIDA:</b></td>
+                                                <td>{{customerSelected.measurement_type}}</td>
+                                                <td colspan="3"><b>MEDIDO:</b></td>
+                                                <td>{{customerSelected.metered}}</td>
+                                                <td colspan="2"><b>MULTIFAMILIAR:</b></td>
+                                                <td>{{customerSelected.multifamily}}</td>
+                                            </tr>                                     
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-warning card-outline shadow-lg">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <table class="table mx-auto text-center">
+                                            <tr>
+                                                <td><b>DEUDA ENERGIA:</b></td>
+                                                <td>{{customerSelected.energy_debt | currencyFormat }}</td>
+                                                <td><b>DEUDA TERCEROS:</b></td>
+                                                <td>{{customerSelected.third_party_debt | currencyFormat }}</td>
+                                                <td><b>DEUDA IRREGULAR:</b></td>
+                                                <td>{{customerSelected.irregular_debt | currencyFormat }}</td>
+                                                <td colspan="3"><b>DEUDA FINANCIADA ENERGIA:</b></td>
+                                                <td>{{customerSelected.financed_energy_debt | currencyFormat }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><b>DEUDA TOTAL:</b></td>
+                                                <td style="background-color: yellow;" colspan="2">{{customerSelected.collection_target | currencyFormat }}</td>
+                                                <td colspan="2"><b>TOTAL FACTURAS:</b></td>
+                                                <td colspan="2">{{customerSelected.total_bills}}</td>
+                                            </tr> 
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-success card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Registro de gestión</h3>
+                                    <div class="card-tools">
+                                        <div class="btn-group">
+                                            <button (click)="abrirModal()" class="btn btn-sm btn-success">
+                                                <i class="fas fa-plus"></i>&nbsp;Registrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td>Campaña</td>
+                                                <td>Gestión</td>
+                                                <td>Resultado</td>
+                                                <td>Anomalia</td>
+                                                <td>Télefono</td>
+                                                <td>Observación</td>
+                                                <td>Op.</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let call of calls">
+                                                <td>{{call.codcamp}}</td>
+                                                <td>{{call.management_type}}</td>
+                                                <td>{{call.result}}</td>
+                                                <td>{{call.anomaly}}</td>
+                                                <td>{{call.contact_phone}}</td>
+                                                <td>{{call.observation}}</td>
+                                                <td>
+                                                    <a type="button" *ngIf="call.id == 2">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="upload == true && detail == false && importUpdate == false" id="upload">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <button type="button" class="btn btn-default" (click)="onBack()">
+                                    <i class="far fa-arrow-alt-circle-left"></i>&nbsp;Volver
+                                </button>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <h4 class="text-center mb-3">Subir Archivo Excel</h4>
+                    
+                                    <!-- Campo Cod Camp -->
+                                    <div class="mb-3">
+                                        <label for="codcamp" class="form-label fw-bold">Código Campaña</label>
+                                        <input type="number" id="codcamp" [(ngModel)]="codcamp" class="form-control" required>
+                                        <div *ngIf="codcampError" class="text-danger small mt-1">⚠️ El campo es obligatorio</div>
+                                    </div>
+                    
+                                    <!-- Input para subir archivo -->
+                                    <div class="text-center">
+                                        <label for="fileUpload" class="custom-file-upload btn btn-outline-primary">
+                                            <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="fileUpload" class="d-none" (change)="onFileSelected($event)">
+                                        <p class="mt-2 text-muted">{{ fileName || 'Ningún archivo seleccionado' }}</p>
+                                    </div>
+                    
+                                    <!-- Mensaje de error si no se selecciona archivo -->
+                                    <div *ngIf="fileError" class="text-danger text-center small mt-1">⚠️ Debes seleccionar un archivo</div>
+                    
+                                    <!-- Botón de subir -->
+                                    <button class="btn btn-success" [disabled]="!codcamp || !selectedFile" (click)="uploadFile()">
+                                        <i class="fas fa-upload"></i> Subir Archivo
+                                    </button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container> 
+                <ng-container *ngIf="upload == false && detail == false && importUpdate == true" id="importCustomerUpdates">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <button type="button" class="btn btn-default" (click)="onBack()">
+                                    <i class="far fa-arrow-alt-circle-left"></i>&nbsp;Volver
+                                </button>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <h4 class="text-center mb-3">Subir Archivo Excel</h4>
+                                    <!-- Input para subir archivo -->
+                                    <div class="text-center">
+                                        <label for="fileUpload" class="custom-file-upload btn btn-outline-primary">
+                                            <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="fileUpload" class="d-none" (change)="onFileSelected($event)">
+                                        <p class="mt-2 text-muted">{{ fileName || 'Ningún archivo seleccionado' }}</p>
+                                    </div>
+                    
+                                    <!-- Mensaje de error si no se selecciona archivo -->
+                                    <div *ngIf="fileError" class="text-danger text-center small mt-1">⚠️ Debes seleccionar un archivo</div>
+                    
+                                    <!-- Botón de subir -->
+                                    <button class="btn btn-success" [disabled]="!selectedFile" (click)="uploadImportFile()">
+                                        <i class="fas fa-upload"></i> Subir Archivo
+                                    </button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>  
+            </div>
+        </div>
+    </div>  
+    <app-add-record [callData]="{ nic: customerSelected?.nic, codcamp: customerSelected?.codcamp }"></app-add-record>
+</section>

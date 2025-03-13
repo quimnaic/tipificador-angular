@@ -1,1 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+    zoom: 0.9; /* Reduce todo al 90% */
+    height: 100%;
+    margin: 0;
+}
+
+.main-sidebar {
+    height: 100%; /* Asegura que el sidebar ocupe el alto total del contenedor */
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+    min-height: 106vh!important;
+}
+
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    }
+    
+    .spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 
+.modal-backdrop {
+    width: 140vw!important;
+    height: 140vh!important;
+    z-index: 1040!important;
+}
+
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  }

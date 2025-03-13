@@ -1,0 +1,37 @@
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.custom-file-upload i {
+    margin-right: 8px;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.center {
+    text-align: center; /* Centra el texto horizontalmente */
+}
+
+.shadow-box {
+    background-color: #fff; /* Color de fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    padding: 20px; /* Espaciado interno */
+    margin: 20px auto; /* Margen superior/inferior y centrado horizontal */
+    max-width: 600px; /* Ancho máximo del div */
+}

@@ -1,0 +1,82 @@
+<div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Agregar registro | {{callData.nic}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="callForm" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label>Gestión</label>
+                            <select name="" id="" class="form-control" formControlName="management_type" (change)="onResult($event)" required>
+                                <option value="">--Seleccione--</option>
+                                <option *ngFor="let management of managements" value="{{management.id}}">{{management.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Resultado</label>
+                            <select name="" id="" class="form-control" formControlName="result" (change)="onAnomaly($event)" required>
+                                <option value="">--Seleccione--</option>
+                                <option *ngFor="let result of results" value="{{result.id}}">{{result.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Anomalía</label>
+                            <select name="" id="" formControlName="anomaly" class="form-control">
+                                <option value="">--Seleccione--</option>
+                                <option *ngFor="let anomaly of anomalies" value="{{anomaly.id}}">{{anomaly.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Entidad de Recaudo</label>
+                            <input type="text" class="form-control" formControlName="collection_entity" placeholder="PSE, Banco, Transacción, Convenio...">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Fecha de Compromiso</label>
+                            <input type="date" formControlName="commitment_date" class="form-control">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Fecha de Pago</label>
+                            <input type="date" formControlName="payment_date" class="form-control">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Valor Pago</label>
+                            <input type="number" formControlName="payment_value" class="form-control" placeholder="12345">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Nombre Contacto</label>
+                            <input type="text" formControlName="contact_name" class="form-control" placeholder="Juan Perez">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Cédula Contacto</label>
+                            <input type="text" formControlName="contact_id" class="form-control" placeholder="123456789">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Correo Contacto</label>
+                            <input type="mail" formControlName="contact_email" class="form-control" placeholder="contoso@mail.com">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Teléfono</label>
+                            <input type="text" formControlName="contact_phone" class="form-control" placeholder="3111111111">
+                        </div>
+                        <div class="col-sm-8">
+                            <label>Observación</label>
+                            <input type="text" formControlName="observation" class="form-control" placeholder="3111111111: Anotación...">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="resetForm()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
