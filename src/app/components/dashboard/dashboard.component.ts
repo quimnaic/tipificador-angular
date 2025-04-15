@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import Swal from 'sweetalert2';
 import { CurrencyFormatPipe } from '../../currency-format.pipe';
 import * as ExcelJS from 'exceljs';
+import { SmsService } from '../../sms.service';
 
 declare var $: any;
 
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit {
   showAll: boolean = false;
   maxPhonesToShow: number = 3;
   isLoading: boolean = false;
+  importSms: boolean = false;
 
   // Variables de error
   fileError: boolean = false;
@@ -46,7 +48,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private sharedService: SharedService, 
     private customerService: DebtCollectionManagementService, 
-    private apiService: CallManagementService
+    private apiService: CallManagementService,
+    private smsService: SmsService
   ) {}
 
   private getVariables() {
@@ -77,12 +80,21 @@ export class DashboardComponent implements OnInit {
     this.upload = true;
     this.importUpdate = false;
     this.detail = false;
+    this.importSms = false;
   }
 
   onImportUpload(){
     this.upload = false;
     this.importUpdate = true;
     this.detail = false;
+    this.importSms = false;
+  }
+
+  onImportSms(){
+    this.upload = false;
+    this.importUpdate = false;
+    this.detail = false;
+    this.importSms = true;
   }
 
   onView(customer: any){
@@ -168,6 +180,52 @@ export class DashboardComponent implements OnInit {
     formData.append('file', this.selectedFile as File);
   
     this.customerService.postUpdate(formData).subscribe(
+      response => {
+        console.log('Archivo subido con éxito', response);
+        this.isLoading = false;
+  
+        // ✅ Mostrar el Toast en la parte superior
+        Swal.fire({
+          toast: true,
+          position: 'top-end',  // 🔥 Se muestra arriba a la derecha
+          icon: 'success',
+          title: 'Archivo subido correctamente',
+          showConfirmButton: false,
+          timer: 3000  // ⏳ Se cierra automáticamente en 3 segundos
+        });
+  
+        this.resetForm();
+      },
+      error => {
+        console.error('Error al subir el archivo', error);
+        this.isLoading = false;
+  
+        // ❌ Mostrar error con Toast
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'Error al subir el archivo',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      }
+    );
+  } 
+
+  uploadImportSmsFile() {
+    this.fileError = !this.selectedFile;
+  
+    if (this.fileError) {
+      return; // No continuar si hay errores
+    }
+  
+    this.isLoading = true;
+  
+    const formData = new FormData();
+    formData.append('file', this.selectedFile as File);
+  
+    this.smsService.importSms(formData).subscribe(
       response => {
         console.log('Archivo subido con éxito', response);
         this.isLoading = false;

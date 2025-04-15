@@ -5,7 +5,7 @@
     <div class="content-fluid">
         <div class="col-sm-12 col-12">
             <div class="row">
-                <ng-container *ngIf="detail == false && upload == false && importUpdate == false" id="detail">
+                <ng-container *ngIf="detail == false && upload == false && importUpdate == false && importSms == false" id="detail">
                     <div class="row" id="allRecords">
                         <div class="col-sm-12">
                             <div class="card">
@@ -13,6 +13,9 @@
                                     <a for="" class="card-title">Registros</a>
                                     <div class="card-tools">
                                         <div class="btn-group">
+                                            <button type="button" class="btn btn-default" (click)="onImportUpload()" data-toggle="tooltip" data-placement="top" title="Cargue de SMS">
+                                                <i class="fas fa-file-upload"></i>
+                                            </button>
                                             <button type="button" class="btn btn-default" (click)="onUpload()" data-toggle="tooltip" data-placement="top" title="Cargue masivo de registros">
                                                 <i class="fas fa-file-upload"></i>
                                             </button>
@@ -63,7 +66,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="detail == true && upload == false && importUpdate == false" id="record">
+                <ng-container *ngIf="detail == true && upload == false && importUpdate == false && importSms == false" id="record">
                     <div class="row">
                         <div class="col-sm-12">
                             <div>
@@ -223,7 +226,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="upload == true && detail == false && importUpdate == false" id="upload">
+                <ng-container *ngIf="upload == true && detail == false && importUpdate == false && importSms == false" id="upload">
                     <div class="row">
                         <div class="col-sm-12">
                             <div>
@@ -267,7 +270,7 @@
                         </div>
                     </div>
                 </ng-container> 
-                <ng-container *ngIf="upload == false && detail == false && importUpdate == true" id="importCustomerUpdates">
+                <ng-container *ngIf="upload == false && detail == false && importUpdate == true && importSms == false" id="importCustomerUpdates">
                     <div class="row">
                         <div class="col-sm-12">
                             <div>
@@ -296,6 +299,34 @@
                     
                                     <!-- Botón de subir -->
                                     <button class="btn btn-success" [disabled]="!selectedFile" (click)="uploadImportFile()">
+                                        <i class="fas fa-upload"></i> Subir Archivo
+                                    </button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>  
+                <ng-container *ngIf="upload == false && detail == false && importUpdate == false && importSms == true" id="importSms">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <button type="button" class="btn btn-default" (click)="onBack()">
+                                    <i class="far fa-arrow-alt-circle-left"></i>&nbsp;Volver
+                                </button>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <h4 class="text-center mb-3">Subir Archivo Excel</h4>
+                    
+                                    <!-- Mensaje de error si no se selecciona archivo -->
+                                    <div *ngIf="fileError" class="text-danger text-center small mt-1">⚠️ Debes seleccionar un archivo</div>
+                    
+                                    <!-- Botón de subir -->
+                                    <button class="btn btn-success" [disabled]="!selectedFile" (click)="uploadImportSmsFile()">
                                         <i class="fas fa-upload"></i> Subir Archivo
                                     </button>                                    
                                 </div>
