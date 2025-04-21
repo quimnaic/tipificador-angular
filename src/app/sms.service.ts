@@ -10,9 +10,20 @@ export class SmsService {
 
   constructor(private http: HttpClient) { }
   sms = enviroment.apiUrl + 'gestion-cobranzas/public/api/sms';
+  pdf = enviroment.apiUrl + 'gestion-cobranzas/public/api/sms/pdf';
+  upload = enviroment.apiUrl + 'gestion-cobranzas/public/api/sms/upload';
 
   importSms(formData: any): Observable<any>{
-    return this.http.post(this.sms, formData);
+    return this.http.post(this.upload, formData);
+  }
+
+  pdfSms(): Observable<Blob>{
+    return this.
+    http.get(this.pdf, { responseType: 'blob' });
+  }
+
+  getSms(): Observable<any> {
+    return this.http.get(this.sms);
   }
 
 }

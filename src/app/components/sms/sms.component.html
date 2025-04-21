@@ -1,0 +1,83 @@
+<div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
+<section class="content">
+    <div class="content-fluid">
+        <div class="col-sm-12 col-12">
+            <div class="row">
+                <ng-container *ngIf="index == true && importSms == false" id="importSms">
+                    <div class="row" id="allRecords">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a for="" class="card-title">Registros</a>
+                                    <div class="card-tools">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default" (click)="onImportUpload()" data-toggle="tooltip" data-placement="top" title="Cargue de SMS">
+                                                <i class="fas fa-file-upload"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">                
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr *ngFor="let sms of sms | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                                                <th>Telefono</th>
+                                                <th>Nombre de la Campaña</th>
+                                                <th>Fecha de Envio</th>	
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>                                                              
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" (click)="onPdf()" title="Ver certificado">
+                                                        <i class="far fa-file-pdf"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="index == false && importSms == true" id="importSms">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <button type="button" class="btn btn-default" (click)="onBack()">
+                                    <i class="far fa-arrow-alt-circle-left"></i>&nbsp;Volver
+                                </button>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <h4 class="text-center mb-3">Subir Archivo Excel</h4>
+                    
+                                    <!-- Mensaje de error si no se selecciona archivo -->
+                                    <div *ngIf="fileError" class="text-danger text-center small mt-1">⚠️ Debes seleccionar un archivo</div>
+                    
+                                    <!-- Botón de subir -->
+                                    <button class="btn btn-success" [disabled]="!selectedFile" (click)="uploadImportSmsFile()">
+                                        <i class="fas fa-upload"></i> Subir Archivo
+                                    </button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>  
+            </div>
+        </div>
+    </div>
+</section>

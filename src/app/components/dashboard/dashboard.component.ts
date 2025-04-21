@@ -213,52 +213,6 @@ export class DashboardComponent implements OnInit {
     );
   } 
 
-  uploadImportSmsFile() {
-    this.fileError = !this.selectedFile;
-  
-    if (this.fileError) {
-      return; // No continuar si hay errores
-    }
-  
-    this.isLoading = true;
-  
-    const formData = new FormData();
-    formData.append('file', this.selectedFile as File);
-  
-    this.smsService.importSms(formData).subscribe(
-      response => {
-        console.log('Archivo subido con éxito', response);
-        this.isLoading = false;
-  
-        // ✅ Mostrar el Toast en la parte superior
-        Swal.fire({
-          toast: true,
-          position: 'top-end',  // 🔥 Se muestra arriba a la derecha
-          icon: 'success',
-          title: 'Archivo subido correctamente',
-          showConfirmButton: false,
-          timer: 3000  // ⏳ Se cierra automáticamente en 3 segundos
-        });
-  
-        this.resetForm();
-      },
-      error => {
-        console.error('Error al subir el archivo', error);
-        this.isLoading = false;
-  
-        // ❌ Mostrar error con Toast
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'error',
-          title: 'Error al subir el archivo',
-          showConfirmButton: false,
-          timer: 3000
-        });
-      }
-    );
-  } 
-
   reportAire() {  
     this.isLoading = true;
   
