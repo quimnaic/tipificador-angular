@@ -44,8 +44,8 @@ export class SmsComponent implements OnInit{
     this.page = 1; // Resetear la página al filtrar
   }
 
-  onPdf(){
-    this.apiService.pdfSms().subscribe((response: Blob) => {
+  onPdf(id: any){
+    this.apiService.pdfSms(id).subscribe((response: Blob) => {
       const blob = new Blob([response], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       window.open(url);

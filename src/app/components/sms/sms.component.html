@@ -22,7 +22,7 @@
                                 <div class="card-body">                
                                     <table class="table table-striped">
                                         <thead>
-                                            <tr *ngFor="let sms of sms | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                                            <tr>
                                                 <th>Telefono</th>
                                                 <th>Nombre de la Campaña</th>
                                                 <th>Fecha de Envio</th>	
@@ -31,19 +31,20 @@
                                             </tr>
                                         </thead>                                                              
                                         <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr *ngFor="let sms of sms | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                                                <td>{{sms.celular}}</td>
+                                                <td>{{sms.nombre_campana}}</td>
+                                                <td>{{sms.fecha_envio}}</td>
+                                                <td>{{sms.estado}}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" (click)="onPdf()" title="Ver certificado">
+                                                    <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" (click)="onPdf(sms.id)" title="Ver certificado">
                                                         <i class="far fa-file-pdf"></i>
                                                     </button>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
                                 </div>
                             </div>
                         </div>
