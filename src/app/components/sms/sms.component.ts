@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { subscribe } from 'node:diagnostics_channel';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sms',
-  imports: [CommonModule, NgxPaginationModule],
+  imports: [CommonModule, NgxPaginationModule, FormsModule],
   templateUrl: './sms.component.html',
   styleUrl: './sms.component.css'
 })
@@ -16,6 +17,7 @@ export class SmsComponent implements OnInit{
 
   importSms: boolean = false;
   index: boolean = true;
+  searchCel: string = ''; 
   isLoading: boolean = false;
   fileName: string = 'Ningún archivo seleccionado';
   selectedFile: File | null = null;
@@ -44,8 +46,8 @@ export class SmsComponent implements OnInit{
     this.page = 1; // Resetear la página al filtrar
   }
 
-  onPdf(id: any){
-    this.apiService.pdfSms(id).subscribe((response: Blob) => {
+  onPdf(sms: any){
+    this.apiService.pdfSms(sms).subscribe((response: Blob) => {
       const blob = new Blob([response], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       window.open(url);
@@ -116,5 +118,12 @@ export class SmsComponent implements OnInit{
       }
     );
   } 
+
+  filterSms() {
+    this.filteredSms = this.sms.filter(cel =>
+      cel.celular.toLowerCase().includes(this.searchCel.toLowerCase())
+    );
+    this.page = 1; // Resetear la página al filtrar
+  }
 
 }
