@@ -28,6 +28,7 @@ export class AuthService {
         localStorage.setItem('token', res.token); // Guardar token en LocalStorage
         localStorage.setItem('document', res.user.document); // Guardar token en LocalStorage
         localStorage.setItem('isLoggedIn', 'true'); // Marcar sesión activa
+        localStorage.setItem('user', JSON.stringify(res.user));
         this.isAuthenticated.next(true); // Emitir estado de autenticación
       })
     );
@@ -37,10 +38,16 @@ export class AuthService {
     localStorage.removeItem('token'); // Eliminar el token
     localStorage.removeItem('isLoggedIn'); // Eliminar estado de autenticación
     localStorage.removeItem('document'); // Eliminar estado de autenticación
+    localStorage.removeItem('user');
     this.isAuthenticated.next(false); // Emitir estado de autenticación como falso
   }
 
   register(formData: any): Observable<any>{
     return this.http.post<any>(this.urlRegister, formData);
+  }
+
+  getCurrentUser(): any {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 }
