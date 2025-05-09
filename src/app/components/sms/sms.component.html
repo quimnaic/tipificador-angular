@@ -66,6 +66,14 @@
                             <div class="card shadow-lg">
                                 <div class="card-body">
                                     <h4 class="text-center mb-3">Subir Archivo Excel</h4>
+                                    <!-- Input para subir archivo -->
+                                    <div class="text-center">
+                                        <label for="fileUpload" class="custom-file-upload btn btn-outline-primary">
+                                            <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="fileUpload" class="d-none" (change)="onFileSelected($event)">
+                                        <p class="mt-2 text-muted">{{ fileName || 'Ningún archivo seleccionado' }}</p>
+                                    </div>
                     
                                     <!-- Mensaje de error si no se selecciona archivo -->
                                     <div *ngIf="fileError" class="text-danger text-center small mt-1">⚠️ Debes seleccionar un archivo</div>
