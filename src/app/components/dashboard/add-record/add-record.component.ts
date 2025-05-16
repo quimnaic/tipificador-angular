@@ -21,6 +21,7 @@ export class AddRecordComponent implements OnInit{
   results: any[] = [];
   anomalies: any[] = [];
   isLoading: boolean = false;
+  mostrarCampos: boolean = false;
 
   constructor(private sharedService: SharedService, private fb: FormBuilder, private interaction: InteractionService, private apiService: CallManagementService){
     this.callForm = this.fb.group({
@@ -39,7 +40,9 @@ export class AddRecordComponent implements OnInit{
       contact_phone: [''],
       observation: [''],
       call_duration: [''],
-      user_manager: ['']
+      user_manager: [''],
+      nuevo_telefono: [''],
+      nueva_direccion: ['']
     })
   }
 
@@ -125,6 +128,16 @@ export class AddRecordComponent implements OnInit{
         });
         this.isLoading = false;
       })
+    }
+  }
+  mostrarCamposContacto(event: any) {
+    this.mostrarCampos = event.target.checked;
+    // Si se desmarca el checkbox, puedes limpiar los valores de los campos adicionales
+    if (!this.mostrarCampos) {
+      this.callForm.patchValue({
+        nuevo_telefono: '',
+        nueva_direccion: ''
+      });
     }
   }
 }

@@ -70,6 +70,22 @@
                             <label>Observación</label>
                             <input type="text" formControlName="observation" class="form-control" placeholder="3111111111: Anotación...">
                         </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="actualizarContacto" (change)="mostrarCamposContacto($event)">
+                                <label class="form-check-label" for="actualizarContacto">
+                                    Actualizar Teléfono y Dirección
+                                </label>
+                            </div>
+                        </div>
+                        <div *ngIf="mostrarCampos" class="col-sm-6 mt-2">
+                            <label for="nuevoTelefono">Nuevo Teléfono</label>
+                            <input type="text" class="form-control" id="nuevoTelefono" formControlName="nuevo_telefono" placeholder="Nuevo número de teléfono">
+                        </div>
+                        <div *ngIf="mostrarCampos" class="col-sm-6 mt-2">
+                            <label for="nuevaDireccion">Nueva Dirección</label>
+                            <input type="text" class="form-control" id="nuevaDireccion" formControlName="nueva_direccion" placeholder="Nueva dirección">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
