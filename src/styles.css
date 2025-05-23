@@ -9,17 +9,6 @@ html, body {
     height: 100%; /* Asegura que el sidebar ocupe el alto total del contenedor */
 }
 
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.content-wrapper {
-    flex: 1;
-    min-height: 106vh!important;
-}
-
 .spinner-overlay {
     position: fixed;
     top: 0;
