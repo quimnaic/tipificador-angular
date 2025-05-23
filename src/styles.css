@@ -1,14 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 html, body {
     zoom: 0.9; /* Reduce todo al 90% */
-    height: 100%;
+    height: 90%;
     margin: 0;
 }
 
 .main-sidebar {
     height: 100%; /* Asegura que el sidebar ocupe el alto total del contenedor */
 }
-
 
 .wrapper {
     display: flex;
