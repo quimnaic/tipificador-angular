@@ -57,7 +57,7 @@
                                 <th>Acciones</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let audio of filteredAudios">
+                                <tr *ngFor="let audio of filteredAudios | paginate: { itemsPerPage: pageSize, currentPage: page }">
                                     <td>{{audio.code}}</td>
                                     <td>{{audio.phone}}</td>
                                     <td>{{audio.date}}</td>
