@@ -52,35 +52,42 @@ export class AudiosComponent implements OnInit{
   }
 
   onAnio(event: Event): void{
+    this.isLoading = true;
     this.selectAnio = (event.target as HTMLSelectElement).value;
     this.apiService.getMonthFiles(this.selectAnio).subscribe( resdata => {
       this.month = resdata;
+      this.isLoading = false;
     })
   }
 
   onMonth(event: Event): void{
+    this.isLoading = true;
     this.selectMonth = (event.target as HTMLSelectElement).value;
     this.apiService.getDayFiles(this.selectAnio, this.selectMonth).subscribe( resdata => {
       this.day = resdata;
+      this.isLoading = false;
     })
   }
 
   onSubmit(){
+    this.isLoading = true;
     this.selectDay = this.audiosForm.value.day
     this.apiService.getAudioFiles(this.selectAnio, this.selectMonth, this.selectDay).subscribe( resdata => {
         this.audios = resdata;
         this.filteredAudios = this.audios;
         this.search = false;
         this.detail = true;
+        this.isLoading = false;
       }
     )
   }
 
   onPlay(filename: any): void {
+    this.isLoading = true;
     this.apiService.getPlayAudio(this.selectAnio, this.selectMonth, this.selectDay, filename)
     .subscribe(blob => {
       const audioBlobUrl = URL.createObjectURL(blob);
-
+      this.isLoading = false;
       Swal.fire({
         title: 'Reproduciendo audio',
         html: `
@@ -109,6 +116,7 @@ export class AudiosComponent implements OnInit{
   }
 
   onDownload(filename: any): void {
+    this.isLoading = true;
     this.apiService.getPlayAudio(this.selectAnio, this.selectMonth, this.selectDay, filename)
     .subscribe(blob => {
       const url = window.URL.createObjectURL(blob);
@@ -117,6 +125,7 @@ export class AudiosComponent implements OnInit{
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+      this.isLoading = false;
     }, error => {
       console.error('Error al descargar el archivo:', error);
     });
