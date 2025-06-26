@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import Swal from 'sweetalert2';
 import { CurrencyFormatPipe } from '../../currency-format.pipe';
 import * as ExcelJS from 'exceljs';
+import { firstValueFrom } from 'rxjs';
 import { SmsService } from '../../sms.service';
 
 declare var $: any;
@@ -213,58 +214,69 @@ export class DashboardComponent implements OnInit {
     );
   } 
 
-  reportAire() {  
-    this.isLoading = true;
-  
-    // Llamada al servicio para obtener los datos de la API
-    this.apiService.getReportData().subscribe(data => {
-      this.reportData = data.data;
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Reporte Aire');
-  
-      // Definir las columnas
-      worksheet.columns = [
-        { header: 'Codcamp', key: 'codcamp' },
-        { header: 'NIC', key: 'nic' },
-        { header: 'Fecha de Gestión', key: 'management_date' },
-        { header: 'Hora de Gestión', key: 'management_time' },
-        { header: 'Gestión', key: 'management' },
-        { header: 'Resultado', key: 'result' },
-        { header: 'Anomalía', key: 'anomaly' },
-        { header: 'Entidad de Cobro', key: 'collection_entity' },
-        { header: 'Fecha Compromiso', key: 'commitment_date' },
-        { header: 'Fecha Pago', key: 'payment_date' },
-        { header: 'Valor de Pago', key: 'payment_value' },
-        { header: 'Nombre de Contacto', key: 'contact_name' },
-        { header: 'ID de Contacto', key: 'contact_id' },
-        { header: 'Correo de Contacto', key: 'contact_email' },
-        { header: 'Teléfono de Contacto', key: 'contact_phone' },
-        { header: 'Observación', key: 'observation' },
-        { header: 'Usuario Agente', key: 'user_manager' }
-      ];
-  
-      // Agregar filas con los datos del JSON
-      worksheet.addRows(this.reportData);
-  
-      // Crear un buffer con el archivo Excel y descargarlo
-      workbook.xlsx.writeBuffer().then(buffer => {
+
+async reportAire() {
+  Swal.fire({
+    html: "Digite el codigo de la campaña",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    },
+    showCancelButton: true,
+    confirmButtonText: "Descargar",
+    confirmButtonColor: "#3498db",
+    showLoaderOnConfirm: true,
+    preConfirm: async (login) => {
+      try {
+        const formData = { codcamp: login };
+
+        // Espera la respuesta de la API usando firstValueFrom
+        const data: any = await firstValueFrom(this.apiService.getReportData(formData));
+        this.reportData = data.data;
+
+        const ExcelJS = await import('exceljs'); // Asegúrate de tenerlo instalado
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Reporte Aire');
+
+        worksheet.columns = [
+          { header: 'Codcamp', key: 'codcamp' },
+          { header: 'NIC', key: 'nic' },
+          { header: 'Fecha de Gestión', key: 'management_date' },
+          { header: 'Hora de Gestión', key: 'management_time' },
+          { header: 'Gestión', key: 'management' },
+          { header: 'Resultado', key: 'result' },
+          { header: 'Anomalía', key: 'anomaly' },
+          { header: 'Entidad de Cobro', key: 'collection_entity' },
+          { header: 'Fecha Compromiso', key: 'commitment_date' },
+          { header: 'Fecha Pago', key: 'payment_date' },
+          { header: 'Valor de Pago', key: 'payment_value' },
+          { header: 'Nombre de Contacto', key: 'contact_name' },
+          { header: 'ID de Contacto', key: 'contact_id' },
+          { header: 'Correo de Contacto', key: 'contact_email' },
+          { header: 'Teléfono de Contacto', key: 'contact_phone' },
+          { header: 'Observación', key: 'observation' },
+          { header: 'Usuario Agente', key: 'user_manager' }
+        ];
+
+        worksheet.addRows(this.reportData);
+
+        const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'reporte_aire.xlsx';
         link.click();
-  
-        // ✅ Desactivar el loading después de que termine la descarga
-        this.isLoading = false;
-      }).catch(err => {
-        console.error('Error al generar el archivo Excel', err);
-        this.isLoading = false; // Asegurar que se desactive el loading en caso de error
-      });
-    }, error => {
-      console.error('Error en la API', error);
-      this.isLoading = false; // Asegurar que se desactive el loading si la API falla
-    });
-  }
+
+      } catch (error) {
+        console.error('Error:', error);
+        Swal.showValidationMessage(`Error: ${(error as any).message || error}`);
+      }
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  });
+}
+
   
 
   resetForm() {

@@ -22,7 +22,7 @@ export class CallManagementService {
     return this.http.post(this.listCall, body);
   }
 
-  getReportData(): Observable<any>{
-    return this.http.get<any>(this.reportAire);
+  getReportData(formData: any): Observable<any>{
+    return this.http.post<any>(this.reportAire, formData);
   }
 }

@@ -1,0 +1,90 @@
+<div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
+<section class="content">
+    <div class="content-fluid">     
+        <div class="col-12">
+            <ng-container *ngIf="search == true && detail == false">
+                <div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form [formGroup]="audiosForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label for="">Año</label>
+                                            <select name="" id="" class="form-control" (change)="onAnio($event)" formControlName="anio">
+                                                <option value="">--Seleccione--</option>
+                                                <option *ngFor="let anio of anio" value="{{anio}}">{{anio}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="">Mes</label>
+                                            <select name="" id="" class="form-control" (change)="onMonth($event)" formControlName="month">
+                                                <option value="">--Seleccione--</option>
+                                                <option *ngFor="let month of month" value="{{month}}">{{month}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="">Día</label>
+                                            <select name="" id="" class="form-control" formControlName="day">
+                                                <option value="">--Seleccione--</option>
+                                                <option *ngFor="let day of day" value="{{day}}">{{day}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 d-flex justify-content-center" style="padding: 10px;">
+                                            <button class="btn btn-info">Buscar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>  
+            <ng-container *ngIf="search == false && detail == true">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" class="form-control mb-3" placeholder="Buscar por Siniestro..." [(ngModel)]="searches" (input)="filterAudios()">
+                        <table class="table table-hover">
+                            <thead>
+                                <th>Número</th>
+                                <th>Extension</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Acciones</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let audio of filteredAudios">
+                                    <td>{{audio.code}}</td>
+                                    <td>{{audio.phone}}</td>
+                                    <td>{{audio.date}}</td>
+                                    <td>{{audio.time}}</td>
+                                    <td>
+                                        <div class="button-group">
+                                          <button type="button" class="btn btn-sm btn-default" (click)="onDownload(audio.filename)">
+                                            <i class="fa fa-download"></i>
+                                          </button>
+                                      
+                                          <button type="button" class="btn btn-sm btn-default" (click)="onPlay(audio.filename)">
+                                            <i class="fa fa-play"></i>
+                                          </button>
+                                      
+                                          <audio *ngIf="currentAudioFilename === audio.filename" controls>
+                                            <source [src]="audioSrc" type="audio/wav">
+                                            Tu navegador no soporta el elemento de audio.
+                                          </audio>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</section>
